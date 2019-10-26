@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 //@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 @SpringBootApplication
-public class  JwtSpringSecurityApplication implements CommandLineRunner {
+public class   JwtSpringSecurityApplication implements CommandLineRunner {
     @Autowired
       private TaskRepository taskRepository;
     @Autowired
@@ -32,8 +32,8 @@ public class  JwtSpringSecurityApplication implements CommandLineRunner {
     }
     @Override
     public void run(String... args) throws Exception {
-        accountService.saveUser(new AppUser(null,"admin","1234",null));
-        accountService.saveUser(new AppUser(null,"user","1234",null));
+        accountService.saveUser(new AppUser("admin","1234",null));
+        accountService.saveUser(new AppUser("user","1234",null));
         accountService.saveRole(new Role(null,"ADMIN"));
         accountService.saveRole(new Role(null,"USER"));
         accountService.addRoleToUser("admin","USER");
