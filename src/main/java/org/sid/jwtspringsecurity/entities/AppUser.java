@@ -51,7 +51,7 @@ public class AppUser {
         this.username = username;
     }
 
-@JsonIgnore
+    @JsonIgnore // ne pas afficher mdp
     public String getPassword() {
         return password;
     }
