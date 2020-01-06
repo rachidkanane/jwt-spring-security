@@ -11,11 +11,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 
+
+    @Qualifier("userDetailsServiceImpl")
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
@@ -36,17 +39,19 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
+        http.csrf().disable()
         //http.formLogin().loginPage("/login"); si tu veux personaliser votre page de login
-
+          //.formLogin()
         //don't create session = STATELESS passage d'un sys auth par ref a un autre par valeur
-         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
+         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
          //http.formLogin();
-       http.authorizeRequests().antMatchers("/login/**","/register/**").permitAll();
-       http.authorizeRequests().antMatchers(HttpMethod.POST,"/Tasks/**").hasAuthority("ADMIN");
-        http.authorizeRequests().anyRequest().authenticated();
-        http.addFilter(new JWTAuthenticationFilter(authenticationManager()));
+         .authorizeRequests().antMatchers("/login/**","/register/**","/appusers/**","/**").permitAll()
+         .antMatchers(HttpMethod.POST,"/Tasks/**").hasAuthority("ADMIN")
+         .anyRequest().authenticated()
+         .and()
+         .addFilter(new JWTAuthenticationFilter(authenticationManager()))
+                .addFilterBefore(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
     }
 }

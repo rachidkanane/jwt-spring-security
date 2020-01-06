@@ -33,7 +33,7 @@ public class   JwtSpringSecurityApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         accountService.saveUser(new AppUser("admin","1234",null));
-        accountService.saveUser(new AppUser("user","1234",null));
+        accountService.saveUser(new AppUser( "user","1234",null));
         accountService.saveRole(new Role(null,"ADMIN"));
         accountService.saveRole(new Role(null,"USER"));
         accountService.addRoleToUser("admin","USER");
